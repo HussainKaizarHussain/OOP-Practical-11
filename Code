@@ -1,0 +1,84 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+// Student structure
+struct Student {
+    int id;
+    string name;
+    double marks;
+};
+
+int main() {
+    string filename = "students.csv";
+
+    // 1. Write student records to CSV file using ofstream
+    cout << "--- 1. Writing Student Records to " << filename << " ---\n";
+    ofstream outFile(filename, ios::out | ios::trunc);
+    if (!outFile.is_open()) {
+        cerr << "Error: Could not open file for writing!\n";
+        return 1;
+    }
+
+    // CSV format: ID,Name,Marks
+    vector<Student> students = {
+        {101, "Aarav Sharma", 88.5},
+        {102, "Priya Verma", 92.0},
+        {103, "Rohan Patel", 79.25}
+    };
+
+    for (const auto& s : students) {
+        outFile << s.id << "," << s.name << "," << s.marks << "\n";
+    }
+    outFile.close();
+    cout << "Successfully wrote 3 records to " << filename << ".\n\n";
+
+    // 2. Read student records back from CSV file using ifstream
+    cout << "--- 2. Reading Student Records from " << filename << " ---\n";
+    ifstream inFile(filename, ios::in);
+    if (!inFile.is_open()) {
+        cerr << "Error: Could not open file for reading!\n";
+        return 1;
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        cout << "Read line: " << line << "\n";
+    }
+    inFile.close();
+    cout << "\n";
+
+    // 3. Demonstrating File Position Functions (tellg, seekg, tellp, seekp)
+    cout << "--- 3. Demonstrating File Position Operations ---\n";
+    fstream fileStream(filename, ios::in | ios::out);
+    if (!fileStream.is_open()) {
+        cerr << "Error: Could not open file for bidirectional operations!\n";
+        return 1;
+    }
+
+    // Demonstrate tellp() and seekp() (Output / Put position)
+    cout << "Initial write position (tellp): " << fileStream.tellp() << "\n";
+    fileStream.seekp(0, ios::end); // Move write pointer to end of file
+    cout << "Write position after seekp(0, ios::end) (tellp): " << fileStream.tellp() << "\n";
+    
+    // Append a new record using the put pointer
+    fileStream << "104,Sneha Kulkarni,95.0\n";
+    cout << "Appended new record via put position.\n";
+
+    // Demonstrate tellg() and seekg() (Input / Get position)
+    fileStream.seekg(0, ios::beg); // Move read pointer back to beginning
+    cout << "Read position reset to beginning (tellg): " << fileStream.tellg() << "\n";
+
+    cout << "\nReading file content after update:\n";
+    string updatedLine;
+    while (getline(fileStream, updatedLine)) {
+        cout << "-> " << updatedLine << "\n";
+    }
+
+    fileStream.close();
+    return 0;
+}
