@@ -1,0 +1,19 @@
+--- 1. Writing Student Records to students.csv ---
+Successfully wrote 3 records to students.csv.
+
+--- 2. Reading Student Records from students.csv ---
+Read line: 101,Aarav Sharma,88.5
+Read line: 102,Priya Verma,92.0
+Read line: 103,Rohan Patel,79.25
+
+--- 3. Demonstrating File Position Operations ---
+Initial write position (tellp): 0
+Write position after seekp(0, ios::end) (tellp): 69
+Appended new record via put position.
+Read position reset to beginning (tellg): 0
+
+Reading file content after update:
+-> 101,Aarav Sharma,88.5
+-> 102,Priya Verma,92.0
+-> 103,Rohan Patel,79.25
+-> 104,Sneha Kulkarni,95.0
